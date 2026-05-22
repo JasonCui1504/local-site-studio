@@ -17,14 +17,12 @@ import { WebsiteMockup } from "@/components/WebsiteMockup";
 import { Sparkline } from "@/components/Sparkline";
 
 const actionIcons = [UtensilsCrossed, Camera, Info, HelpCircle];
-
 const actionColors = [
   "border-green-100 hover:border-green-300 hover:bg-green-50",
   "border-violet-100 hover:border-violet-300 hover:bg-violet-50",
   "border-amber-100 hover:border-amber-300 hover:bg-amber-50",
   "border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50",
 ];
-
 const iconColors = [
   "text-green-500 bg-green-50",
   "text-violet-500 bg-violet-50",
@@ -32,17 +30,14 @@ const iconColors = [
   "text-indigo-500 bg-indigo-50",
 ];
 
-// Mock weekly visitor data (Mon–Sun)
 const weeklyVisitors = [38, 52, 45, 78, 63, 91, 85];
+const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
 
 export default function DashboardPage() {
   const { t } = useLanguage();
   const d = t.dashboard;
 
-  const statusDisplay: Record<
-    string,
-    { label: string; icon: React.ReactNode; color: string }
-  > = {
+  const statusDisplay: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
     Pending: {
       label: d.statusPending,
       icon: <Clock size={13} />,
@@ -61,7 +56,6 @@ export default function DashboardPage() {
   };
 
   const recent = mockRequests.slice(0, 4);
-  const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
 
   return (
     <>
@@ -73,15 +67,24 @@ export default function DashboardPage() {
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
             {d.websiteLive}
           </span>
+          <a
+            href="#"
+            className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+          >
+            <ExternalLink size={13} />
+            {d.previewSite}
+          </a>
         </div>
       </header>
 
-      <main className="flex-1 p-8 space-y-8 max-w-3xl">
+      <main className="flex-1 p-6 space-y-6">
 
-        {/* Site snapshot card with mockup + sparkline */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="flex items-stretch">
-            {/* Left: stats + sparkline */}
+        {/* Top row: snapshot card + needs attention side by side */}
+        <div className="grid grid-cols-3 gap-6">
+
+          {/* Snapshot card — spans 2 cols */}
+          <div className="col-span-2 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex">
+            {/* Stats + sparkline */}
             <div className="flex-1 p-6 flex flex-col justify-between min-w-0">
               <div>
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
@@ -97,20 +100,14 @@ export default function DashboardPage() {
                   {d.visitorsChange}
                 </p>
               </div>
-
-              {/* Sparkline */}
               <div className="mt-4">
                 <Sparkline data={weeklyVisitors} />
-                {/* Day labels */}
                 <div className="flex justify-between mt-0.5 px-1">
                   {dayLabels.map((l, i) => (
-                    <span key={i} className="text-[10px] text-gray-300 font-medium">
-                      {l}
-                    </span>
+                    <span key={i} className="text-[10px] text-gray-300 font-medium">{l}</span>
                   ))}
                 </div>
               </div>
-
               <a
                 href="#"
                 className="mt-4 inline-flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
@@ -123,105 +120,93 @@ export default function DashboardPage() {
             {/* Divider */}
             <div className="w-px bg-gray-100 shrink-0" />
 
-            {/* Right: browser mockup */}
+            {/* Browser mockup */}
             <div className="bg-gray-50 px-8 py-6 flex items-center justify-center shrink-0">
               <WebsiteMockup />
             </div>
           </div>
-        </div>
 
-        {/* Needs attention */}
-        <div className="flex items-start gap-4 bg-amber-50 border border-amber-200 rounded-2xl px-6 py-5">
-          <AlertCircle size={20} className="text-amber-500 shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-amber-900">
-              {d.attentionHeading}
-            </p>
-            <p className="text-sm text-amber-700 mt-0.5 leading-relaxed">
-              {d.attentionMsg}
-            </p>
-          </div>
-          <Link
-            href="/dashboard/photos"
-            className="shrink-0 text-xs font-semibold text-amber-700 bg-amber-100 hover:bg-amber-200 border border-amber-300 rounded-lg px-3 py-2 transition-colors whitespace-nowrap"
-          >
-            {d.attentionAction}
-          </Link>
-        </div>
-
-        {/* Action cards */}
-        <div>
-          <h2 className="text-base font-semibold text-gray-700 mb-4">
-            {d.actionsHeading}
-          </h2>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {d.actions.map((action, i) => {
-              const Icon = actionIcons[i];
-              return (
-                <Link
-                  key={i}
-                  href={action.href}
-                  className={`group flex items-start gap-4 rounded-2xl border-2 bg-white p-5 transition-all ${actionColors[i]}`}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconColors[i]}`}
-                  >
-                    <Icon size={20} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 group-hover:text-gray-700">
-                      {action.title}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                      {action.desc}
-                    </p>
-                  </div>
-                  <ArrowRight
-                    size={16}
-                    className="text-gray-300 group-hover:text-gray-500 transition-colors mt-0.5 shrink-0"
-                  />
-                </Link>
-              );
-            })}
+          {/* Needs attention — 1 col */}
+          <div className="flex flex-col gap-4">
+            <div className="flex-1 bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <AlertCircle size={17} className="text-amber-500 shrink-0" />
+                <p className="text-sm font-semibold text-amber-900">{d.attentionHeading}</p>
+              </div>
+              <p className="text-sm text-amber-700 leading-relaxed flex-1">
+                {d.attentionMsg}
+              </p>
+              <Link
+                href="/dashboard/photos"
+                className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-100 hover:bg-amber-200 border border-amber-300 rounded-lg px-3 py-2 transition-colors"
+              >
+                {d.attentionAction}
+                <ArrowRight size={13} />
+              </Link>
+            </div>
           </div>
         </div>
 
-        {/* Recent activity */}
-        <div>
-          <h2 className="text-base font-semibold text-gray-700 mb-4">
-            {d.recentActivity}
-          </h2>
-          {recent.length === 0 ? (
-            <p className="text-sm text-gray-400">{d.noActivity}</p>
-          ) : (
-            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
-              {recent.map((req) => {
-                const s = statusDisplay[req.status];
+        {/* Bottom row: action cards + recent activity */}
+        <div className="grid grid-cols-3 gap-6">
+
+          {/* Action cards — 2 cols, 2×2 grid */}
+          <div className="col-span-2">
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              {d.actionsHeading}
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              {d.actions.map((action, i) => {
+                const Icon = actionIcons[i];
                 return (
-                  <div
-                    key={req.id}
-                    className="flex items-start justify-between gap-4 px-5 py-4"
+                  <Link
+                    key={i}
+                    href={action.href}
+                    className={`group flex items-start gap-4 rounded-2xl border-2 bg-white p-5 transition-all ${actionColors[i]}`}
                   >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800">
-                        {req.type}
-                      </p>
-                      <p className="text-xs text-gray-400 mt-0.5 truncate">
-                        {req.description.slice(0, 60)}
-                        {req.description.length > 60 ? "…" : ""}
-                      </p>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconColors[i]}`}>
+                      <Icon size={20} />
                     </div>
-                    <span
-                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium shrink-0 ${s.color}`}
-                    >
-                      {s.icon}
-                      {s.label}
-                    </span>
-                  </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-900">{action.title}</p>
+                      <p className="text-xs text-gray-500 mt-1 leading-relaxed">{action.desc}</p>
+                    </div>
+                    <ArrowRight size={15} className="text-gray-300 group-hover:text-gray-500 transition-colors mt-0.5 shrink-0" />
+                  </Link>
                 );
               })}
             </div>
-          )}
+          </div>
+
+          {/* Recent activity — 1 col */}
+          <div>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              {d.recentActivity}
+            </h2>
+            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
+              {recent.length === 0 ? (
+                <p className="text-sm text-gray-400 px-5 py-4">{d.noActivity}</p>
+              ) : (
+                recent.map((req) => {
+                  const s = statusDisplay[req.status];
+                  return (
+                    <div key={req.id} className="px-4 py-3.5">
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-medium text-gray-800 leading-tight">{req.type}</p>
+                        <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium shrink-0 ${s.color}`}>
+                          {s.icon}
+                          {s.label}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">
+                        {req.description}
+                      </p>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
         </div>
       </main>
     </>
