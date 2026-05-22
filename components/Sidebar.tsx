@@ -91,6 +91,12 @@ export function Sidebar() {
           <ExternalLink size={12} />
           {t.sidebar.preview}
         </a>
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-xs text-gray-300 hover:text-gray-500 transition-colors"
+        >
+          ← Local Site Studio
+        </Link>
         <p className="text-[10px] text-gray-300">{t.sidebar.powered}</p>
       </div>
     </aside>

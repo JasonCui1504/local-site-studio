@@ -34,8 +34,8 @@ const en = {
   landing: {
     nav: {
       pricing: "Pricing",
-      ownerLogin: "Owner Login",
-      viewDemo: "View Demo",
+      ownerLogin: "Owner Portal",
+      viewDemo: "See a Demo",
     },
     badge: "Built for local restaurants & small businesses",
     hero: {
@@ -149,8 +149,8 @@ const en = {
     },
     footer: {
       tagline: "Beautiful websites for local restaurants and small businesses.",
-      ownerPortal: "Owner Portal",
-      admin: "Admin",
+      ownerPortal: "Log in to your owner portal",
+      contact: "Get in touch",
     },
   },
 
@@ -458,7 +458,7 @@ const zh: typeof en = {
   landing: {
     nav: {
       pricing: "价格",
-      ownerLogin: "商家登录",
+      ownerLogin: "商家后台",
       viewDemo: "查看演示",
     },
     badge: "专为本地餐厅和小型企业打造",
@@ -573,8 +573,8 @@ const zh: typeof en = {
     },
     footer: {
       tagline: "为本地餐厅和小型企业打造精美网站。",
-      ownerPortal: "商家后台",
-      admin: "管理员",
+      ownerPortal: "登录商家后台",
+      contact: "联系我们",
     },
   },
 

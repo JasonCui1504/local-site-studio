@@ -43,7 +43,7 @@ export default function HomePage() {
             </a>
             <Link
               href="/dashboard"
-              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              className="text-sm text-gray-500 hover:text-gray-900 transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-gray-300"
             >
               {l.nav.ownerLogin}
             </Link>
@@ -244,7 +244,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-gray-100 py-10">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center">
               <span className="text-white text-xs font-bold">L</span>
@@ -253,13 +253,16 @@ export default function HomePage() {
               Local Site Studio
             </span>
           </div>
-          <p className="text-sm text-gray-400">{l.footer.tagline}</p>
-          <div className="flex gap-4 text-sm text-gray-500">
-            <Link href="/dashboard" className="hover:text-indigo-600">
-              {l.footer.ownerPortal}
-            </Link>
-            <Link href="/admin" className="hover:text-indigo-600">
-              {l.footer.admin}
+          <p className="text-sm text-gray-400 text-center">{l.footer.tagline}</p>
+          <div className="flex gap-4 text-sm">
+            <a href="mailto:hello@localsitestudio.com" className="text-gray-500 hover:text-indigo-600 transition-colors">
+              {l.footer.contact}
+            </a>
+            <Link
+              href="/dashboard"
+              className="text-indigo-600 font-medium hover:text-indigo-800 transition-colors"
+            >
+              {l.footer.ownerPortal} →
             </Link>
           </div>
         </div>

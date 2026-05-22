@@ -54,33 +54,48 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Private access banner */}
+      <div className="bg-amber-500 text-amber-950 text-xs font-medium text-center py-1.5 px-4">
+        🔒 Private — Operator access only. This page will require authentication in production.
+      </div>
+
       <nav className="bg-gray-900 text-white px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-7 h-7 bg-indigo-500 rounded-lg flex items-center justify-center">
             <span className="text-xs font-bold">L</span>
           </div>
-          <span className="font-semibold text-sm">Local Site Studio</span>
-          <span className="text-gray-500 text-sm">/ Admin</span>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-sm">Local Site Studio</span>
+            <span className="text-gray-500 text-sm">/</span>
+            <span className="text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-md px-2 py-0.5 tracking-wide uppercase">
+              Operator
+            </span>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <LanguageToggle className="border-gray-700" />
           <Link
             href="/dashboard"
-            className="flex items-center gap-1.5 text-xs text-gray-300 hover:text-white"
+            className="flex items-center gap-1.5 text-xs text-gray-300 hover:text-white border border-gray-700 rounded-lg px-3 py-1.5 hover:border-gray-500 transition-colors"
           >
-            <LayoutDashboard size={14} />
+            <LayoutDashboard size={13} />
             {a.viewDemo}
           </Link>
-          <Link href="/" className="text-xs text-gray-300 hover:text-white">
-            {a.marketingSite}
+          <Link href="/" className="text-xs text-gray-400 hover:text-white transition-colors">
+            ← {a.marketingSite}
           </Link>
         </div>
       </nav>
 
       <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{a.title}</h1>
-          <p className="text-gray-500 mt-1">{a.sub}</p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">{a.title}</h1>
+            <p className="text-gray-500 mt-1">{a.sub}</p>
+          </div>
+          <span className="text-xs text-gray-400 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm">
+            Signed in as <span className="font-semibold text-gray-700">Jason Cui</span> · Operator
+          </span>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
