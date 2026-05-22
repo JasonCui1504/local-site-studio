@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { mockRequests } from "@/lib/mock-data";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { WebsiteMockup } from "@/components/WebsiteMockup";
+import { Sparkline } from "@/components/Sparkline";
 
 const actionIcons = [UtensilsCrossed, Camera, Info, HelpCircle];
 
@@ -30,11 +32,17 @@ const iconColors = [
   "text-indigo-500 bg-indigo-50",
 ];
 
+// Mock weekly visitor data (Mon–Sun)
+const weeklyVisitors = [38, 52, 45, 78, 63, 91, 85];
+
 export default function DashboardPage() {
   const { t } = useLanguage();
   const d = t.dashboard;
 
-  const statusDisplay: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+  const statusDisplay: Record<
+    string,
+    { label: string; icon: React.ReactNode; color: string }
+  > = {
     Pending: {
       label: d.statusPending,
       icon: <Clock size={13} />,
@@ -53,35 +61,82 @@ export default function DashboardPage() {
   };
 
   const recent = mockRequests.slice(0, 4);
+  const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
 
   return (
     <>
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-8 py-5 flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">{d.greeting}</h1>
-        </div>
+        <h1 className="text-xl font-bold text-gray-900">{d.greeting}</h1>
         <div className="flex items-center gap-3">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 border border-green-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
             {d.websiteLive}
           </span>
-          <a
-            href="#"
-            className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 transition-colors font-medium"
-          >
-            <ExternalLink size={13} />
-            {d.previewSite}
-          </a>
         </div>
       </header>
 
-      <main className="flex-1 p-8 max-w-3xl space-y-8">
+      <main className="flex-1 p-8 space-y-8 max-w-3xl">
+
+        {/* Site snapshot card with mockup + sparkline */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          <div className="flex items-stretch">
+            {/* Left: stats + sparkline */}
+            <div className="flex-1 p-6 flex flex-col justify-between min-w-0">
+              <div>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  {d.siteSnapshot}
+                </p>
+                <div className="mt-3 flex items-end gap-2">
+                  <p className="text-4xl font-bold text-gray-900 leading-none">
+                    {d.visitorsCount}
+                  </p>
+                  <p className="text-sm text-gray-500 mb-0.5">{d.visitorsLabel}</p>
+                </div>
+                <p className="text-xs text-green-600 font-medium mt-1">
+                  {d.visitorsChange}
+                </p>
+              </div>
+
+              {/* Sparkline */}
+              <div className="mt-4">
+                <Sparkline data={weeklyVisitors} />
+                {/* Day labels */}
+                <div className="flex justify-between mt-0.5 px-1">
+                  {dayLabels.map((l, i) => (
+                    <span key={i} className="text-[10px] text-gray-300 font-medium">
+                      {l}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <a
+                href="#"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+              >
+                <ExternalLink size={12} />
+                {d.previewSite}
+              </a>
+            </div>
+
+            {/* Divider */}
+            <div className="w-px bg-gray-100 shrink-0" />
+
+            {/* Right: browser mockup */}
+            <div className="bg-gray-50 px-8 py-6 flex items-center justify-center shrink-0">
+              <WebsiteMockup />
+            </div>
+          </div>
+        </div>
+
         {/* Needs attention */}
         <div className="flex items-start gap-4 bg-amber-50 border border-amber-200 rounded-2xl px-6 py-5">
           <AlertCircle size={20} className="text-amber-500 shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-amber-900">{d.attentionHeading}</p>
+            <p className="text-sm font-semibold text-amber-900">
+              {d.attentionHeading}
+            </p>
             <p className="text-sm text-amber-700 mt-0.5 leading-relaxed">
               {d.attentionMsg}
             </p>

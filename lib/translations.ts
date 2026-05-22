@@ -212,6 +212,10 @@ const en = {
     statusPending: "Waiting",
     statusInProgress: "We're on it",
     statusCompleted: "Done",
+    siteSnapshot: "Your site at a glance",
+    visitorsCount: "247",
+    visitorsLabel: "visitors this week",
+    visitorsChange: "↑ 12% vs. last week",
   },
 
   requests: {
@@ -632,6 +636,10 @@ const zh: typeof en = {
     statusPending: "等待中",
     statusInProgress: "处理中",
     statusCompleted: "已完成",
+    siteSnapshot: "网站概况",
+    visitorsCount: "247",
+    visitorsLabel: "本周访客",
+    visitorsChange: "↑ 较上周增长 12%",
   },
 
   requests: {
