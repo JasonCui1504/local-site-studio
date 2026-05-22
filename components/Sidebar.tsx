@@ -2,12 +2,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  FileText,
+  Home,
+  Info,
   Image,
   UtensilsCrossed,
   Settings,
-  MessageSquarePlus,
+  HelpCircle,
   ExternalLink,
   Store,
 } from "lucide-react";
@@ -17,18 +17,20 @@ import { LanguageToggle } from "./LanguageToggle";
 export function Sidebar() {
   const pathname = usePathname();
   const { t } = useLanguage();
+  const n = t.sidebar.nav;
+  const d = t.sidebar.navDesc;
 
   const navItems = [
-    { label: t.sidebar.nav.dashboard, href: "/dashboard", icon: LayoutDashboard },
-    { label: t.sidebar.nav.content, href: "/dashboard/content", icon: FileText },
-    { label: t.sidebar.nav.requests, href: "/dashboard/requests", icon: MessageSquarePlus },
-    { label: t.sidebar.nav.photos, href: "/dashboard/photos", icon: Image },
-    { label: t.sidebar.nav.menu, href: "/dashboard/menu", icon: UtensilsCrossed },
-    { label: t.sidebar.nav.settings, href: "/dashboard/settings", icon: Settings },
+    { label: n.dashboard, desc: null, href: "/dashboard", icon: Home },
+    { label: n.content, desc: d.content, href: "/dashboard/content", icon: Info },
+    { label: n.requests, desc: d.requests, href: "/dashboard/requests", icon: HelpCircle },
+    { label: n.photos, desc: d.photos, href: "/dashboard/photos", icon: Image },
+    { label: n.menu, desc: d.menu, href: "/dashboard/menu", icon: UtensilsCrossed },
+    { label: n.settings, desc: d.settings, href: "/dashboard/settings", icon: Settings },
   ];
 
   return (
-    <aside className="w-56 shrink-0 bg-white border-r border-gray-200 flex flex-col min-h-screen">
+    <aside className="w-60 shrink-0 bg-white border-r border-gray-200 flex flex-col min-h-screen">
       <div className="px-5 pt-6 pb-4 border-b border-gray-100">
         <div className="flex items-center gap-2">
           <div className="bg-indigo-600 rounded-lg p-1.5">
@@ -45,7 +47,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      <nav className="flex-1 py-4 px-3 space-y-0.5">
+      <nav className="flex-1 py-4 px-3 space-y-1">
         {navItems.map((item) => {
           const isActive =
             item.href === "/dashboard"
@@ -55,14 +57,26 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              className={`flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors group ${
                 isActive
                   ? "bg-indigo-50 text-indigo-700"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
-              <item.icon size={16} />
-              {item.label}
+              <item.icon
+                size={17}
+                className={`mt-0.5 shrink-0 ${isActive ? "text-indigo-600" : "text-gray-400 group-hover:text-gray-600"}`}
+              />
+              <div className="min-w-0">
+                <p className={`text-sm font-medium leading-tight ${isActive ? "text-indigo-700" : ""}`}>
+                  {item.label}
+                </p>
+                {item.desc && (
+                  <p className={`text-[11px] leading-tight mt-0.5 ${isActive ? "text-indigo-400" : "text-gray-400"}`}>
+                    {item.desc}
+                  </p>
+                )}
+              </div>
             </Link>
           );
         })}

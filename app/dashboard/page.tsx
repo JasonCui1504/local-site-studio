@@ -1,173 +1,172 @@
 "use client";
 import Link from "next/link";
 import {
-  Globe,
-  MessageSquarePlus,
-  Camera,
-  Clock,
   UtensilsCrossed,
-  ExternalLink,
-  CheckCircle2,
+  Camera,
+  Info,
+  HelpCircle,
+  ArrowRight,
   AlertCircle,
+  CheckCircle2,
+  Clock,
+  ExternalLink,
 } from "lucide-react";
-import { StatCard } from "@/components/StatCard";
-import { RequestStatusBadge } from "@/components/RequestStatusBadge";
-import { mockRequests, mockBusinessContent } from "@/lib/mock-data";
+import { mockRequests } from "@/lib/mock-data";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+const actionIcons = [UtensilsCrossed, Camera, Info, HelpCircle];
+
+const actionColors = [
+  "border-green-100 hover:border-green-300 hover:bg-green-50",
+  "border-violet-100 hover:border-violet-300 hover:bg-violet-50",
+  "border-amber-100 hover:border-amber-300 hover:bg-amber-50",
+  "border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50",
+];
+
+const iconColors = [
+  "text-green-500 bg-green-50",
+  "text-violet-500 bg-violet-50",
+  "text-amber-500 bg-amber-50",
+  "text-indigo-500 bg-indigo-50",
+];
 
 export default function DashboardPage() {
   const { t } = useLanguage();
   const d = t.dashboard;
+
+  const statusDisplay: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+    Pending: {
+      label: d.statusPending,
+      icon: <Clock size={13} />,
+      color: "text-amber-600 bg-amber-50 border-amber-200",
+    },
+    "In Progress": {
+      label: d.statusInProgress,
+      icon: <AlertCircle size={13} />,
+      color: "text-blue-600 bg-blue-50 border-blue-200",
+    },
+    Completed: {
+      label: d.statusCompleted,
+      icon: <CheckCircle2 size={13} />,
+      color: "text-green-600 bg-green-50 border-green-200",
+    },
+  };
+
   const recent = mockRequests.slice(0, 4);
-
-  const quickActions = [
-    { label: d.actions.requestChange, href: "/dashboard/requests", icon: MessageSquarePlus, color: "bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100" },
-    { label: d.actions.uploadPhotos, href: "/dashboard/photos", icon: Camera, color: "bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100" },
-    { label: d.actions.updateHours, href: "/dashboard/content", icon: Clock, color: "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100" },
-    { label: d.actions.updateMenu, href: "/dashboard/menu", icon: UtensilsCrossed, color: "bg-green-50 text-green-700 border-green-200 hover:bg-green-100" },
-    { label: d.actions.previewWebsite, href: "#", icon: ExternalLink, color: "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100" },
-  ];
-
-  const healthItems = [
-    { label: d.healthItems.mobile, ok: true },
-    { label: d.healthItems.menu, ok: true },
-    { label: d.healthItems.hours, ok: true },
-    { label: d.healthItems.photos, ok: false },
-    { label: d.healthItems.contact, ok: true },
-  ];
-
-  const businessTagline =
-    t.mockData.businessTagline;
 
   return (
     <>
+      {/* Header */}
       <header className="bg-white border-b border-gray-200 px-8 py-5 flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-gray-900">{d.title}</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{d.sub}</p>
+          <h1 className="text-xl font-bold text-gray-900">{d.greeting}</h1>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+        <div className="flex items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 border border-green-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
             {d.websiteLive}
           </span>
+          <a
+            href="#"
+            className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 transition-colors font-medium"
+          >
+            <ExternalLink size={13} />
+            {d.previewSite}
+          </a>
         </div>
       </header>
 
-      <main className="flex-1 p-8 space-y-8">
-        <div className="bg-indigo-600 rounded-2xl p-6 text-white flex items-start justify-between">
-          <div>
-            <p className="text-indigo-200 text-sm">{d.yourWebsite}</p>
-            <h2 className="text-xl font-bold mt-1">{mockBusinessContent.name}</h2>
-            <p className="text-indigo-200 text-sm mt-1">{businessTagline}</p>
-            <p className="text-indigo-200 text-xs mt-3">{d.lastUpdated}</p>
+      <main className="flex-1 p-8 max-w-3xl space-y-8">
+        {/* Needs attention */}
+        <div className="flex items-start gap-4 bg-amber-50 border border-amber-200 rounded-2xl px-6 py-5">
+          <AlertCircle size={20} className="text-amber-500 shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-amber-900">{d.attentionHeading}</p>
+            <p className="text-sm text-amber-700 mt-0.5 leading-relaxed">
+              {d.attentionMsg}
+            </p>
           </div>
-          <div className="flex flex-col items-end gap-2">
-            <a
-              href="#"
-              className="flex items-center gap-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors px-3 py-2 text-xs font-medium text-white"
-            >
-              <Globe size={13} />
-              goldenlanternbistro.com
-            </a>
-            <span className="text-indigo-200 text-xs">{d.growthPlan}</span>
-          </div>
+          <Link
+            href="/dashboard/photos"
+            className="shrink-0 text-xs font-semibold text-amber-700 bg-amber-100 hover:bg-amber-200 border border-amber-300 rounded-lg px-3 py-2 transition-colors whitespace-nowrap"
+          >
+            {d.attentionAction}
+          </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard
-            label={d.stats.openRequests}
-            value={mockRequests.filter((r) => r.status !== "Completed").length}
-            icon={MessageSquarePlus}
-            iconColor="text-amber-500"
-            sub={`2 ${d.stats.needAttention}`}
-          />
-          <StatCard
-            label={d.stats.photosOnline}
-            value={6}
-            icon={Camera}
-            iconColor="text-violet-500"
-            sub={`3 ${d.stats.onHomepage}`}
-          />
-          <StatCard
-            label={d.stats.menuItems}
-            value={10}
-            icon={UtensilsCrossed}
-            iconColor="text-green-500"
-            sub={`1 ${d.stats.unavailable}`}
-          />
-          <StatCard
-            label={d.stats.siteStatus}
-            value={t.common.live}
-            icon={Globe}
-            iconColor="text-indigo-600"
-            sub={d.stats.allPagesUp}
-          />
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-            <h2 className="font-semibold text-gray-900 mb-4">{d.quickActions}</h2>
-            <div className="space-y-2">
-              {quickActions.map((action) => (
+        {/* Action cards */}
+        <div>
+          <h2 className="text-base font-semibold text-gray-700 mb-4">
+            {d.actionsHeading}
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {d.actions.map((action, i) => {
+              const Icon = actionIcons[i];
+              return (
                 <Link
-                  key={action.label}
+                  key={i}
                   href={action.href}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium border transition-colors ${action.color}`}
+                  className={`group flex items-start gap-4 rounded-2xl border-2 bg-white p-5 transition-all ${actionColors[i]}`}
                 >
-                  <action.icon size={16} />
-                  {action.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-            <h2 className="font-semibold text-gray-900 mb-4">{d.health}</h2>
-            <div className="space-y-3">
-              {healthItems.map((item) => (
-                <div key={item.label} className="flex items-center gap-3">
-                  {item.ok ? (
-                    <CheckCircle2 size={16} className="text-green-500 shrink-0" />
-                  ) : (
-                    <AlertCircle size={16} className="text-amber-500 shrink-0" />
-                  )}
-                  <span
-                    className={`text-sm ${item.ok ? "text-gray-700" : "text-amber-700 font-medium"}`}
+                  <div
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconColors[i]}`}
                   >
-                    {item.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-gray-900">{d.recentRequests}</h2>
-              <Link
-                href="/dashboard/requests"
-                className="text-xs text-indigo-600 hover:text-indigo-800"
-              >
-                {t.common.viewAll}
-              </Link>
-            </div>
-            <div className="space-y-3">
-              {recent.map((req) => (
-                <div key={req.id} className="flex items-start justify-between gap-2">
+                    <Icon size={20} />
+                  </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">
-                      {req.type}
+                    <p className="text-sm font-semibold text-gray-900 group-hover:text-gray-700">
+                      {action.title}
                     </p>
-                    <p className="text-xs text-gray-400 truncate">
-                      {req.description.slice(0, 48)}…
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                      {action.desc}
                     </p>
                   </div>
-                  <RequestStatusBadge status={req.status} />
-                </div>
-              ))}
-            </div>
+                  <ArrowRight
+                    size={16}
+                    className="text-gray-300 group-hover:text-gray-500 transition-colors mt-0.5 shrink-0"
+                  />
+                </Link>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Recent activity */}
+        <div>
+          <h2 className="text-base font-semibold text-gray-700 mb-4">
+            {d.recentActivity}
+          </h2>
+          {recent.length === 0 ? (
+            <p className="text-sm text-gray-400">{d.noActivity}</p>
+          ) : (
+            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
+              {recent.map((req) => {
+                const s = statusDisplay[req.status];
+                return (
+                  <div
+                    key={req.id}
+                    className="flex items-start justify-between gap-4 px-5 py-4"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-800">
+                        {req.type}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-0.5 truncate">
+                        {req.description.slice(0, 60)}
+                        {req.description.length > 60 ? "…" : ""}
+                      </p>
+                    </div>
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium shrink-0 ${s.color}`}
+                    >
+                      {s.icon}
+                      {s.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </main>
     </>
