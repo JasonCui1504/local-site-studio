@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   Users,
@@ -12,6 +13,8 @@ import { ClientCard } from "@/components/ClientCard";
 import { RequestStatusBadge } from "@/components/RequestStatusBadge";
 import { StatCard } from "@/components/StatCard";
 import { mockClients, mockAdminRequests } from "@/lib/mock-data";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 const priorityColors: Record<string, string> = {
   Urgent: "bg-red-100 text-red-700",
@@ -41,6 +44,9 @@ function generateClaudeTask(req: (typeof mockAdminRequests)[0]) {
 }
 
 export default function AdminPage() {
+  const { t } = useLanguage();
+  const a = t.admin;
+
   const totalOpen = mockClients.reduce((sum, c) => sum + c.openRequests, 0);
   const pendingRequests = mockAdminRequests.filter(
     (r) => r.status === "Pending"
@@ -48,7 +54,6 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Admin nav */}
       <nav className="bg-gray-900 text-white px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-7 h-7 bg-indigo-500 rounded-lg flex items-center justify-center">
@@ -58,54 +63,49 @@ export default function AdminPage() {
           <span className="text-gray-500 text-sm">/ Admin</span>
         </div>
         <div className="flex items-center gap-4">
+          <LanguageToggle className="border-gray-700" />
           <Link
             href="/dashboard"
             className="flex items-center gap-1.5 text-xs text-gray-300 hover:text-white"
           >
             <LayoutDashboard size={14} />
-            View demo client
+            {a.viewDemo}
           </Link>
           <Link href="/" className="text-xs text-gray-300 hover:text-white">
-            Marketing site
+            {a.marketingSite}
           </Link>
         </div>
       </nav>
 
       <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
-        {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Operator Dashboard
-          </h1>
-          <p className="text-gray-500 mt-1">
-            Manage all client sites, requests, and tasks from one place.
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900">{a.title}</h1>
+          <p className="text-gray-500 mt-1">{a.sub}</p>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            label="Active clients"
+            label={a.stats.activeClients}
             value={mockClients.length}
             icon={Users}
             iconColor="text-indigo-600"
           />
           <StatCard
-            label="Open requests"
+            label={a.stats.openRequests}
             value={totalOpen}
             icon={AlertCircle}
             iconColor="text-amber-500"
-            sub="Across all clients"
+            sub={a.stats.acrossClients}
           />
           <StatCard
-            label="Pending review"
+            label={a.stats.pendingReview}
             value={pendingRequests.length}
             icon={Clock}
             iconColor="text-blue-500"
-            sub="Need your attention"
+            sub={a.stats.needAttention}
           />
           <StatCard
-            label="Sites live"
+            label={a.stats.sitesLive}
             value={mockClients.filter((c) => c.websiteStatus === "Live").length}
             icon={CheckCircle2}
             iconColor="text-green-500"
@@ -113,19 +113,15 @@ export default function AdminPage() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Client list */}
           <div className="lg:col-span-2 space-y-4">
-            <h2 className="font-semibold text-gray-900 text-base">Clients</h2>
+            <h2 className="font-semibold text-gray-900 text-base">{a.clients}</h2>
             {mockClients.map((client) => (
               <ClientCard key={client.id} client={client} />
             ))}
           </div>
 
-          {/* Request queue */}
           <div className="space-y-4">
-            <h2 className="font-semibold text-gray-900 text-base">
-              Incoming requests
-            </h2>
+            <h2 className="font-semibold text-gray-900 text-base">{a.incoming}</h2>
             <div className="space-y-3">
               {mockAdminRequests.map((req) => (
                 <div
@@ -138,9 +134,7 @@ export default function AdminPage() {
                     </span>
                     <RequestStatusBadge status={req.status} />
                   </div>
-                  <p className="text-xs font-medium text-gray-600">
-                    {req.type}
-                  </p>
+                  <p className="text-xs font-medium text-gray-600">{req.type}</p>
                   <p className="text-xs text-gray-500 mt-1 line-clamp-2">
                     {req.description}
                   </p>
@@ -160,14 +154,14 @@ export default function AdminPage() {
                   <div className="flex gap-2 mt-3">
                     <button className="flex items-center gap-1 text-xs text-green-700 border border-green-200 rounded-lg px-2.5 py-1 hover:bg-green-50 transition-colors">
                       <CheckCircle2 size={11} />
-                      Complete
+                      {t.common.complete}
                     </button>
                     <Link
                       href="/dashboard/requests"
                       className="flex items-center gap-1 text-xs text-gray-600 border border-gray-200 rounded-lg px-2.5 py-1 hover:bg-gray-50 transition-colors"
                     >
                       <ExternalLink size={11} />
-                      View
+                      {t.common.view}
                     </Link>
                   </div>
                 </div>
@@ -176,26 +170,19 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Claude Code task preview */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-6 h-6 rounded bg-gray-900 flex items-center justify-center">
               <Zap size={13} className="text-amber-400" />
             </div>
-            <h2 className="font-semibold text-gray-900">
-              Claude Code Task Preview
-            </h2>
+            <h2 className="font-semibold text-gray-900">{a.taskPanel.title}</h2>
           </div>
-          <p className="text-sm text-gray-500 mb-5">
-            Automatically turns a restaurant owner&apos;s request into a structured
-            developer task.
-          </p>
+          <p className="text-sm text-gray-500 mb-5">{a.taskPanel.sub}</p>
 
           <div className="grid lg:grid-cols-2 gap-6">
-            {/* Source request */}
             <div>
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">
-                Owner request
+                {a.taskPanel.ownerRequest}
               </p>
               <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-2">
                 <div className="flex items-center gap-2">
@@ -209,8 +196,7 @@ export default function AdminPage() {
                   </span>
                 </div>
                 <p className="text-xs text-gray-500">
-                  {mockAdminRequests[0].type} &middot;{" "}
-                  {mockAdminRequests[0].page}
+                  {mockAdminRequests[0].type} &middot; {mockAdminRequests[0].page}
                 </p>
                 <p className="text-sm text-gray-700 leading-relaxed">
                   {mockAdminRequests[0].description}
@@ -218,10 +204,9 @@ export default function AdminPage() {
               </div>
             </div>
 
-            {/* Generated task */}
             <div>
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">
-                Generated Claude Code task
+                {a.taskPanel.generated}
               </p>
               <div className="bg-gray-900 rounded-xl p-4 font-mono text-xs text-gray-300 whitespace-pre-wrap leading-relaxed overflow-auto max-h-64">
                 {generateClaudeTask(mockAdminRequests[0])}
@@ -232,11 +217,11 @@ export default function AdminPage() {
           <div className="flex gap-3 mt-5">
             <button className="flex items-center gap-2 bg-gray-900 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-gray-800 transition-colors">
               <Zap size={14} className="text-amber-400" />
-              Generate Claude Code task
+              {a.taskPanel.generate}
             </button>
             <button className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors">
               <CheckCircle2 size={14} className="text-green-500" />
-              Mark completed
+              {a.taskPanel.markComplete}
             </button>
           </div>
         </div>

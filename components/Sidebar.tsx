@@ -11,26 +11,24 @@ import {
   ExternalLink,
   Store,
 } from "lucide-react";
-
-const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Website Content", href: "/dashboard/content", icon: FileText },
-  {
-    label: "Change Requests",
-    href: "/dashboard/requests",
-    icon: MessageSquarePlus,
-  },
-  { label: "Photos", href: "/dashboard/photos", icon: Image },
-  { label: "Menu", href: "/dashboard/menu", icon: UtensilsCrossed },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageToggle } from "./LanguageToggle";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { label: t.sidebar.nav.dashboard, href: "/dashboard", icon: LayoutDashboard },
+    { label: t.sidebar.nav.content, href: "/dashboard/content", icon: FileText },
+    { label: t.sidebar.nav.requests, href: "/dashboard/requests", icon: MessageSquarePlus },
+    { label: t.sidebar.nav.photos, href: "/dashboard/photos", icon: Image },
+    { label: t.sidebar.nav.menu, href: "/dashboard/menu", icon: UtensilsCrossed },
+    { label: t.sidebar.nav.settings, href: "/dashboard/settings", icon: Settings },
+  ];
 
   return (
     <aside className="w-56 shrink-0 bg-white border-r border-gray-200 flex flex-col min-h-screen">
-      {/* Logo / business name */}
       <div className="px-5 pt-6 pb-4 border-b border-gray-100">
         <div className="flex items-center gap-2">
           <div className="bg-indigo-600 rounded-lg p-1.5">
@@ -41,13 +39,12 @@ export function Sidebar() {
               Golden Lantern
             </p>
             <p className="text-[10px] text-gray-400 leading-tight">
-              Owner Portal
+              {t.sidebar.ownerPortal}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 py-4 px-3 space-y-0.5">
         {navItems.map((item) => {
           const isActive =
@@ -71,18 +68,16 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 border-t border-gray-100 space-y-3">
+        <LanguageToggle />
         <a
           href="#"
           className="flex items-center gap-2 text-xs text-gray-400 hover:text-indigo-600 transition-colors"
         >
           <ExternalLink size={12} />
-          Preview your website
+          {t.sidebar.preview}
         </a>
-        <p className="text-[10px] text-gray-300 mt-2">
-          Powered by Local Site Studio
-        </p>
+        <p className="text-[10px] text-gray-300">{t.sidebar.powered}</p>
       </div>
     </aside>
   );
