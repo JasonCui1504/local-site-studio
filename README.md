@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Local Site Studio
 
-## Getting Started
+A service for small restaurants and local businesses. We build clean, modern websites, then give owners a simple portal to manage their content — no tech knowledge required.
 
-First, run the development server:
+## The Business Idea
+
+Most small restaurant websites are outdated, hard to update, and hurt the business more than they help. Local Site Studio solves this with:
+
+1. **A custom-designed website** built for the restaurant
+2. **An owner portal** where they can request changes, upload photos, update menus, and manage hours
+3. **Human-reviewed publishing** — every change is reviewed before it goes live
+4. **Structured task generation** — owner requests can become Claude Code developer tasks, reviewed by the operator
+
+## Running Locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prototype URLs
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | Description |
+|-------|-------------|
+| `http://localhost:3000` | Marketing landing page |
+| `http://localhost:3000/dashboard` | Owner dashboard (Golden Lantern Bistro) |
+| `http://localhost:3000/dashboard/requests` | Change request form + history |
+| `http://localhost:3000/dashboard/content` | Website content editor |
+| `http://localhost:3000/dashboard/photos` | Photo management |
+| `http://localhost:3000/dashboard/menu` | Menu management |
+| `http://localhost:3000/dashboard/settings` | Settings & preferences |
+| `http://localhost:3000/admin` | Operator dashboard |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+- **Next.js 16** with App Router
+- **TypeScript**
+- **Tailwind CSS v4**
+- **lucide-react** icons
+- Mock data only (`lib/mock-data.ts`) — no database yet
 
-To learn more about Next.js, take a look at the following resources:
+## Deploying
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Vercel (recommended)
+npm i -g vercel
+vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Or build for any Node host
+npm run build
+npm start
+```
 
-## Deploy on Vercel
+## Next Backend Steps
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] **Authentication** — NextAuth or Clerk for owner + admin login
+- [ ] **Database** — Supabase or Postgres for clients, requests, content
+- [ ] **Photo storage** — Supabase Storage or S3 for image uploads
+- [ ] **Change request workflow** — status tracking, notifications, email alerts
+- [ ] **Claude Code task generation** — turn owner requests into structured developer tasks via the Anthropic API
+- [ ] **Approval flow** — review queue before changes publish to live site
+- [ ] **Stripe billing** — subscription management for Starter / Growth / Premium plans
+- [ ] **Email notifications** — request confirmation, status updates, publish alerts
